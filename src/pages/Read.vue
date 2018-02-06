@@ -26,7 +26,7 @@
       <div class="sectionsContainer" v-show="selectSection">
         <ul class="list">
           <li class="item" v-for="(item, index) in list" :key="index">
-            <div class="content">
+            <div class="content" @click="toReadSection(item.id)">
               {{item.name}}
             </div>
           </li>
@@ -73,7 +73,7 @@ export default {
       this.$refs['loading'].$emit('infinite')
     },
     infiniteHandler ($state) {
-      let id = '5a72bcdb44d9040068a88f83'
+      let id = this.$route.params.id
       let sql = `select count(*),name from section where bookid = '${id}' limit ${this.page.current * this.page.size},${this.page.size} order by index`
       AV.Query.doCloudQuery(sql).then((data) => {
         this.list = this.list.concat(data.results.map((item) => {
@@ -89,7 +89,7 @@ export default {
 
         // initialize data
         if (this.pictures.images.length === 0) {
-          this.loadPictures(data.results[0].objectId)
+          this.loadPictures(data.results[0].id)
         }
 
         $state.loaded()
@@ -99,7 +99,7 @@ export default {
         }
       })
     },
-    loadPictures (id = '5a7800932f301e0045698efc') {
+    loadPictures (id) {
       let sql = `select * from section where objectId = '${id}'`
       AV.Query.doCloudQuery(sql).then((data) => {
         this.pictures.images = data.results[0].get('images')
@@ -112,6 +112,10 @@ export default {
           this.pictures.index = index + 1
         }
       })
+    },
+    toReadSection (id) {
+      this.loadPictures(id)
+      this.selectSection = false
     }
   }
 }
