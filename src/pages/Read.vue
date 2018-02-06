@@ -6,14 +6,16 @@
       }]"
       @click="selectSection = false"
     >
-      <div class="images">
-        <div class="item"></div>
+      <div class="images" @scroll="updateIndex">
+        <div class="item" v-for="(image, index) in pictures.images" :key="index">
+          <img :src="image" alt="">
+        </div>
       </div>
       <div class="pageInfo">
-        <span class="section">第一章</span>
-        <span class="now">1</span>
+        <span class="section">{{ pictures.name }}</span>
+        <span class="now">{{ pictures.index }}</span>
         /
-        <span class="count">10</span>
+        <span class="count">{{ pictures.images.length }}</span>
       </div>
       <div class="sections" @click.stop="selectSection = true">
         <i class="iconfont icon-liebiao"></i>
@@ -52,6 +54,11 @@ export default {
         current: 0,
         size: 100,
         total: 0
+      },
+      pictures: {
+        images: [],
+        name: '',
+        index: 1
       }
     }
   },
@@ -63,7 +70,6 @@ export default {
   },
   methods: {
     loadData () {
-      console.log(this.$refs)
       this.$refs['loading'].$emit('infinite')
     },
     infiniteHandler ($state) {
@@ -81,10 +87,29 @@ export default {
         this.page.current++
         this.page.total = data.count
 
+        // initialize data
+        if (this.pictures.images.length === 0) {
+          this.loadPictures(data.results[0].objectId)
+        }
+
         $state.loaded()
 
         if (data.results.length < this.page.size || data.results.length === 0) {
           $state.complete()
+        }
+      })
+    },
+    loadPictures (id = '5a7800932f301e0045698efc') {
+      let sql = `select * from section where objectId = '${id}'`
+      AV.Query.doCloudQuery(sql).then((data) => {
+        this.pictures.images = data.results[0].get('images')
+        this.pictures.name = data.results[0].get('name')
+      })
+    },
+    updateIndex ($event) {
+      Array.from($event.target.children).forEach((item, index) => {
+        if ($event.target.scrollTop + $event.target.clientHeight - 40 > item.offsetTop) {
+          this.pictures.index = index + 1
         }
       })
     }
@@ -138,9 +163,13 @@ export default {
 
       .item {
         width: 100%;
-        height: 1200px;
+        height: auto;
         background-color: #fff;
         margin: 10px 0;
+
+        img {
+          width: 100%;
+        }
       }
     }
 
