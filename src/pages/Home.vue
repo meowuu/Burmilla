@@ -76,7 +76,6 @@ export default {
   background-image: linear-gradient(-225deg, #B7F8DB 0%, #50A7C2 100%);
   display: flex;
   justify-content: center;
-  align-items: center;
 
   .cover-bg {
     position: absolute;
@@ -95,6 +94,7 @@ export default {
     width: 70%;
     position: relative;
     z-index: 2;
+    margin-top: 50px;
 
     .title {
       font-size: 50px;
@@ -142,6 +142,20 @@ export default {
           color: #444;
           text-shadow: 0 0 1px #fff;
         }
+      }
+    }
+  }
+}
+
+@media screen and (max-width: 750px) {
+  .home {
+    .container {
+      width: 100%;
+      margin-top: 20px;
+
+      .title {
+        padding: 0 20px;
+        font-size: 35px;
       }
     }
   }
