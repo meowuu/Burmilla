@@ -19,6 +19,12 @@
           :key="index"
           @mouseenter="mEnter(book)"
           @mouseout="mOut(book)"
+          @click="$router.push({
+            name: 'Read',
+            params: {
+              id: book.id
+            }
+          })"
         >
           <div class="cover">
             <img :src="book.cover" alt="">
