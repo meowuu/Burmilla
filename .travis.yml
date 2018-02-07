@@ -1,0 +1,22 @@
+language: node_js
+node_js:
+  - "node"
+cache:
+  directories:
+    - "node_modules"
+before_script:
+  - git config user.name "moonou"
+  - git config user.email "moonoulong@gmail.com"
+  - git clone --branch gh-pages ${REPOSITORY} dist
+install:
+  - npm install
+script:
+  - npm run build
+  - cd dist
+  - git add --all .
+  - git commit --message "update gh-pages"
+  - git push --quiet --force "https://${GH_TOKEN}@${REPOSITORY} gh-pages:gh-pages"
+env:
+  global:
+   - REPOSITORY: github.com/meowuu/Burmilla.git
+   - GH_TOKEN: 01007a8e060e10bc0ceaf561fc501dc49ea83f6a
