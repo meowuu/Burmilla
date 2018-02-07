@@ -6,7 +6,7 @@
       }]"
       @click="selectSection = false"
     >
-      <div class="images" @scroll="updateIndex">
+      <div class="images" @scroll="updateIndex" ref="pictureContainer">
         <div class="item" v-for="(image, index) in pictures.images" :key="index">
           <img :src="image" alt="">
         </div>
@@ -25,7 +25,9 @@
     <transition name="slideLeft">
       <div class="sectionsContainer" v-show="selectSection">
         <ul class="list">
-          <li class="item" v-for="(item, index) in list" :key="index">
+          <li :class="['item', {
+            active: currentSection === item.id
+          }]" v-for="(item, index) in list" :key="index">
             <div class="content" @click="toReadSection(item.id)">
               {{item.name}}
             </div>
@@ -50,6 +52,7 @@ export default {
     return {
       list: [],
       selectSection: false,
+      currentSection: '',
       page: {
         current: 0,
         size: 100,
@@ -100,6 +103,10 @@ export default {
       })
     },
     loadPictures (id) {
+      this.currentSection = id
+
+      this.$refs['pictureContainer'].scrollTop = 0
+
       let sql = `select * from section where objectId = '${id}'`
       AV.Query.doCloudQuery(sql).then((data) => {
         this.pictures.images = data.results[0].get('images')
@@ -213,6 +220,14 @@ export default {
 
         .content {
           transition: all .3s ease;
+        }
+
+        &.active {
+          .content {
+            &:before {
+              content: '🐾'
+            }
+          }
         }
       }
 
