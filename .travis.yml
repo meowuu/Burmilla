@@ -4,7 +4,7 @@ cache:
   directories:
     - "node_modules"
 before_script:
-  - echo "{\n  \"id\":\"$AppID\",\n  \"key\":\"$AppKEY\" \n}" > src/assets/leancloud.json
+  - echo "{\"id\":\"$AppID\",\"key\":\"$AppKEY\"}" > src/assets/leancloud.json
   - git config user.name "moonou"
   - git config user.email "moonoulong@gmail.com"
   - git clone --branch gh-pages https://${REPOSITORY} dist
