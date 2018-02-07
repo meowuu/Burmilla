@@ -7,7 +7,7 @@ cache:
 before_script:
   - git config user.name "moonou"
   - git config user.email "moonoulong@gmail.com"
-  - git clone --branch gh-pages ${REPOSITORY} dist
+  - git clone --branch gh-pages https://${REPOSITORY} dist
 install:
   - npm install
 script:
