@@ -5,6 +5,7 @@ cache:
   directories:
     - "node_modules"
 before_script:
+  - echo "{\n  \"id\": \"$AppID\",\n  \"key\": \"$AppKEY\" \n}" > src/assets/leancloud.json
   - git config user.name "moonou"
   - git config user.email "moonoulong@gmail.com"
   - git clone --branch gh-pages https://${REPOSITORY} dist
@@ -15,7 +16,7 @@ script:
   - cd dist
   - git add --all .
   - git commit --message "update gh-pages"
-  - git push --quiet --force "https://${GH_TOKEN}@${REPOSITORY} gh-pages:gh-pages"
+  - git push --quiet --force https://${GH_TOKEN}@${REPOSITORY} gh-pages:gh-pages
 env:
   global:
    - REPOSITORY: github.com/meowuu/Burmilla.git
