@@ -17,8 +17,15 @@
         /
         <span class="count">{{ pictures.images.length }}</span>
       </div>
-      <div class="sections" @click.stop="selectSection = true">
-        <i class="iconfont icon-liebiao"></i>
+      <div class="menus">
+        <div class="item" @click.stop="selectSection = true">
+          <i class="iconfont icon-liebiao"></i>
+        </div>
+        <div class="item" @click.stop="$router.push({
+          name: 'Home'
+        })">
+          <i class="iconfont icon-home"></i>
+        </div>
       </div>
     </div>
 
@@ -145,7 +152,7 @@ export default {
     transition: all .3s ease;
 
     .pageInfo {
-      position: fixed;
+      position: absolute;
       bottom: 10px;
       left: 10px;
       background-color: #707070;
@@ -156,8 +163,8 @@ export default {
       font-size: 12px;
     }
 
-    .sections {
-      position: fixed;
+    .menus {
+      position: absolute;
       top: 10px;
       left: 10px;
       background-color: #707070;
@@ -165,8 +172,16 @@ export default {
       padding: 10px;
       opacity: 0.6;
       cursor: pointer;
-      i {
-        color: #fff;
+
+      .item {
+        margin-bottom: 10px;
+        &:last-child {
+          margin-bottom: 0;
+        }
+        i {
+          color: #fff;
+          font-size: 18px;
+        }
       }
     }
 
