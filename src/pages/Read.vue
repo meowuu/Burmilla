@@ -92,7 +92,11 @@ export default {
 
         // initialize data
         if (this.pictures.images.length === 0) {
-          this.loadPictures(data.results[0].id)
+          let section = localStorage.section
+          if (!section) {
+            section = data.results[0].id
+          }
+          this.loadPictures(section)
         }
 
         $state.loaded()
@@ -105,7 +109,7 @@ export default {
     loadPictures (id) {
       this.currentSection = id
 
-      this.$refs['pictureContainer'].scrollTop = 0
+      localStorage.section = id
 
       let sql = `select * from section where objectId = '${id}'`
       AV.Query.doCloudQuery(sql).then((data) => {
@@ -122,6 +126,7 @@ export default {
     },
     toReadSection (id) {
       this.loadPictures(id)
+      this.$refs['pictureContainer'].scrollTop = 0
       this.selectSection = false
     }
   }
