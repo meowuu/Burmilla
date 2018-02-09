@@ -1,4 +1,4 @@
-# Burmilla
+<h2 align="center"> Burmilla </h2>
 
 Build Status: ![build](https://travis-ci.org/meowuu/Burmilla.svg?branch=master)
 
