@@ -27,7 +27,10 @@
         <span class="count">{{ pictures.images.length }}</span>
       </div>
       <div class="menus">
-        <div class="item" @click.stop="selectSection = true">
+        <div class="item" @click.stop="() => {
+          selectSection = true
+          $nextTick(scrollSection)
+        }">
           <i class="iconfont icon-liebiao"></i>
         </div>
         <div class="item" @click.stop="$router.push({
@@ -40,7 +43,7 @@
 
     <transition name="slideLeft">
       <div class="sectionsContainer" v-show="selectSection">
-        <ul class="list">
+        <ul ref="sections" class="list">
           <li :class="['item', {
             active: currentSection === item.id
           }]" v-for="(item, index) in list" :key="index">
@@ -122,6 +125,7 @@ export default {
         $state.loaded()
 
         if (data.results.length < this.page.size || data.results.length === 0) {
+          console.log('complate')
           $state.complete()
         }
       })
@@ -155,6 +159,23 @@ export default {
       this.loadPictures(id)
       this.$refs['pictureContainer'].scrollTop = 0
       this.selectSection = false
+    },
+    scrollSection () {
+      let flag = false
+
+      this.list.forEach((item, index) => {
+        if (this.currentSection === item.id) {
+          Array.from(this.$refs['sections'].children).forEach((node, nodeIndex) => {
+            if (nodeIndex === index) {
+              this.$refs['sections'].scrollTop = node.offsetTop - (this.$refs['sections'].clientHeight / 2)
+            }
+          })
+
+          flag = true
+        }
+      })
+
+      return flag
     }
   }
 }
@@ -282,6 +303,7 @@ export default {
       height: 50vh;
       overflow-y: auto;
       -webkit-overflow-scrolling: touch;
+      position: relative;
 
       li {
         margin-bottom: 20px;
