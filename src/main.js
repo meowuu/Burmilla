@@ -4,6 +4,7 @@ import Vue from 'vue'
 import App from './App'
 import router from './router'
 import AV from 'leancloud-storage'
+import VueLazyload from 'vue-lazyload'
 
 import leancloudConfig from '@/assets/leancloud.json'
 
@@ -19,6 +20,12 @@ AV.init({ appId, appKey })
 window.AV = AV
 
 Vue.config.productionTip = false
+
+Vue.use(VueLazyload, {
+  preLoad: 1.9,
+  loading: 'static/tail-spin.svg',
+  attempt: 1
+})
 
 /* eslint-disable no-new */
 new Vue({

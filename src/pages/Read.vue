@@ -11,10 +11,10 @@
         <div class="loading" v-if="state.fetch" key="loading">
           <div class="panel">加载中...</div>
         </div>
-        <div class="imagesContainer" v-else @scroll="updateIndex" key="images">
-          <div class="images" ref="pictureContainer">
+        <div class="imagesContainer" v-else key="images">
+          <div class="images" ref="pictureContainer" @scroll="updateIndex">
             <div class="item" v-for="(image, index) in pictures.images" :key="index">
-              <img :src="image" alt="">
+              <img v-lazy="image" alt="">
             </div>
           </div>
         </div>
@@ -217,12 +217,18 @@ export default {
       .item {
         width: 100%;
         height: auto;
-        background-color: #fff;
+        background-color: transparent;
         margin: 10px 0;
+        text-align: center;
 
         img {
           width: 100%;
+          &[lazy=loading] {
+            width: 20%;
+            margin: 20px 0;
+          }
         }
+
       }
     }
 
