@@ -6,11 +6,20 @@
       }]"
       @click="selectSection = false"
     >
-      <div class="images" @scroll="updateIndex" ref="pictureContainer">
-        <div class="item" v-for="(image, index) in pictures.images" :key="index">
-          <img :src="image" alt="">
+
+      <transition name="fade">
+        <div class="loading" v-if="state.fetch" key="loading">
+          <div class="panel">加载中...</div>
         </div>
-      </div>
+        <div class="imagesContainer" v-else @scroll="updateIndex" key="images">
+          <div class="images" ref="pictureContainer">
+            <div class="item" v-for="(image, index) in pictures.images" :key="index">
+              <img :src="image" alt="">
+            </div>
+          </div>
+        </div>
+      </transition>
+
       <div class="pageInfo">
         <span class="section">{{ pictures.name }}</span>
         <span class="now">{{ pictures.index }}</span>
@@ -53,6 +62,7 @@
 
 <script>
 import InfiniteLoading from 'vue-infinite-loading'
+import AsyncLoad from '@/lib/loadImage'
 
 export default {
   data () {
@@ -69,6 +79,9 @@ export default {
         images: [],
         name: '',
         index: 1
+      },
+      state: {
+        fetch: true
       }
     }
   },
@@ -118,9 +131,16 @@ export default {
 
       localStorage.section = id
 
+      this.state.fetch = true
+
       let sql = `select * from section where objectId = '${id}'`
       AV.Query.doCloudQuery(sql).then((data) => {
-        this.pictures.images = data.results[0].get('images')
+        AsyncLoad(data.results[0].get('images')[0])
+          .then(() => {
+            this.state.fetch = false
+            this.pictures.images = data.results[0].get('images')
+          })
+
         this.pictures.name = data.results[0].get('name')
       })
     },
@@ -150,6 +170,8 @@ export default {
   .container {
     background-color: #444444;
     transition: all .3s ease;
+    height: 100%;
+    height: 100%;
 
     .pageInfo {
       position: absolute;
@@ -202,6 +224,34 @@ export default {
           width: 100%;
         }
       }
+    }
+
+    .loading {
+      width: 100%;
+      height: 100%;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      position: absolute;
+      top: 0;
+
+      .panel {
+        width: 200px;
+        height: 150px;
+        background: linear-gradient(to bottom, #fff, #ddd);
+        border-radius: 4px;
+        color: #555;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        font-size: 12px;
+        box-shadow: 0 2px 10px 0 #1b1b1b;
+      }
+    }
+    .imagesContainer {
+      position: absolute;
+      top: 0;
+      width: 100%;
     }
 
     &.scale {
