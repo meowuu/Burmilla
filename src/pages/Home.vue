@@ -9,7 +9,9 @@
 
     <div class="container">
       <div class="title">
-        列表🦉
+        <span>
+          Burmilla
+        </span>
       </div>
 
       <div class="list">
@@ -18,7 +20,7 @@
           v-for="(book, index) in list"
           :key="index"
           @mouseenter="mEnter(book)"
-          @mouseout="mOut(book)"
+          @mouseleave="mOut(book)"
           @click="$router.push({
             name: 'Read',
             params: {
@@ -79,7 +81,7 @@ export default {
   width: 100vw;
   height: 100vh;
   overflow: hidden;
-  background-image: linear-gradient(-225deg, #B7F8DB 0%, #50A7C2 100%);
+  background: #444;
   display: flex;
   justify-content: center;
 
@@ -103,8 +105,14 @@ export default {
     margin-top: 50px;
 
     .title {
-      font-size: 50px;
+      font-size: 40px;
       color: #353535;
+      text-align: center;
+      span {
+        background: linear-gradient(-225deg, #B7F8DB 0%, #50A7C2 100%);
+        -webkit-background-clip: text;
+        -webkit-text-fill-color: transparent;
+      }
     }
 
     .list {
@@ -112,29 +120,33 @@ export default {
       text-align: center;
       white-space: nowrap;
       width: 100%;
-      overflow-x: scroll;
       padding: 50px 0;
 
       .item {
-        width: 200px;
-        display: inline-block;
+        width: 50%;
         margin: 0 20px;
+        background: #fff;
+        margin: auto;
+        display: flex;
+        align-items: center;
+        cursor: pointer;
+        transition: all .3s ease;
+        border-radius: 4px;
+        overflow: hidden;
+        padding: 10px;
+        box-sizing: border-box;
+        box-shadow: 0 2px 10px 0 #292929;
+
         &:hover {
-          .cover {
-            transform: translateY(-10px);
-            box-shadow: 0 0 15px 0 #666666;
-          }
+          transform: translateY(-10px);
+          // box-shadow: 0 12px 15px 0 #919191;
         }
 
         .cover {
-          width: 200px;
-          height: 250px;
+          width: 120px;
+          height: 120px;
           background-color: #353535;
-          border-radius: 15px;
-          cursor: pointer;
           overflow: hidden;
-          transition: all .3s ease;
-          box-shadow: 0 0 5px 0 #8e8e8e;
 
           img {
             width: 100%;
@@ -143,10 +155,12 @@ export default {
           }
         }
         .name {
-          text-align: center;
-          margin-top: 20px;
+          padding-left: 20px;
+          text-align: left;
           color: #444;
           text-shadow: 0 0 1px #fff;
+          flex: 1 1 auto;
+          font-size: 14px;
         }
       }
     }
