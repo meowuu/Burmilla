@@ -29,7 +29,7 @@
       <div class="menus">
         <div class="item" @click.stop="() => {
           selectSection = true
-          $nextTick(scrollSection)
+          $nextTick(tryScrollSection)
         }">
           <i class="iconfont icon-liebiao"></i>
         </div>
@@ -89,31 +89,18 @@ export default {
     }
   },
   mounted () {
-    this.loadData()
+    this.loadSection()
   },
   components: {
     InfiniteLoading
   },
   methods: {
-    loadData () {
+    // load section data
+    loadSection () {
       this.$refs['loading'].$emit('infinite')
     },
     infiniteHandler ($state) {
-      let id = this.$route.params.id
-      let sql = `select count(*),name from section where bookid = '${id}' limit ${this.page.current * this.page.size},${this.page.size} order by index`
-      AV.Query.doCloudQuery(sql).then((data) => {
-        this.list = this.list.concat(data.results.map((item) => {
-          return {
-            name: item.get('name'),
-            id: item.id,
-            index: item.get('id')
-          }
-        }))
-
-        this.page.current++
-        this.page.total = data.count
-
-        // initialize data
+      this.fetchSection().then((data) => {
         if (this.pictures.images.length === 0) {
           let section = localStorage.section
           if (!section) {
@@ -121,13 +108,33 @@ export default {
           }
           this.loadPictures(section)
         }
-
-        $state.loaded()
+        $state && $state.loaded()
 
         if (data.results.length < this.page.size || data.results.length === 0) {
           console.log('complate')
-          $state.complete()
+          $state && $state.complete()
         }
+      })
+    },
+    fetchSection () {
+      return new Promise((resolve, reject) => {
+        let id = this.$route.params.id
+        let sql = `select count(*),name from section where bookid = '${id}' limit ${this.page.current * this.page.size},${this.page.size} order by index`
+        AV.Query.doCloudQuery(sql).then((data) => {
+          this.list = this.list.concat(data.results.map((item) => {
+            return {
+              name: item.get('name'),
+              id: item.id,
+              index: item.get('id')
+            }
+          }))
+
+          this.page.current++
+          this.page.total = data.count
+
+          resolve(data)
+        })
+          .catch(reject)
       })
     },
     loadPictures (id) {
@@ -139,6 +146,7 @@ export default {
 
       let sql = `select * from section where objectId = '${id}'`
       AV.Query.doCloudQuery(sql).then((data) => {
+        // preLoad first image
         AsyncLoad(data.results[0].get('images')[0])
           .then(() => {
             this.state.fetch = false
@@ -159,6 +167,13 @@ export default {
       this.loadPictures(id)
       this.$refs['pictureContainer'].scrollTop = 0
       this.selectSection = false
+    },
+    async tryScrollSection () {
+      let flag = true
+      while (flag) {
+        flag = !this.scrollSection()
+        await this.fetchSection()
+      }
     },
     scrollSection () {
       let flag = false

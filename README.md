@@ -6,6 +6,3 @@ Build Status: ![build](https://travis-ci.org/meowuu/Burmilla.svg?branch=master)
 Burmilla is a cartoon reader, base on Vue.js and LeanCloud
 
 ![cover](https://github.com/meowuu/Burmilla/raw/master/screenshot/cover.png?raw=true)
-
-# TODO
-- [ ] location next page section
