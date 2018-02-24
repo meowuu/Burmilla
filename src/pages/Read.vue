@@ -14,7 +14,7 @@
         <div class="imagesContainer" v-else key="images">
           <div class="images" ref="pictureContainer" @scroll="updateIndex">
             <div class="item" v-for="(image, index) in pictures.images" :key="index">
-              <img v-lazy="image" alt="">
+              <img :src="image" alt="" ref="images">
             </div>
           </div>
         </div>
@@ -65,7 +65,9 @@
 
 <script>
 import InfiniteLoading from 'vue-infinite-loading'
-import AsyncLoad from '@/lib/loadImage'
+import AsyncLoad, { Pool } from '@/lib/loadImage'
+
+let pool = new Pool()
 
 export default {
   data () {
@@ -164,6 +166,13 @@ export default {
       })
     },
     toReadSection (id) {
+      pool.abortAll()
+
+      this.$refs['images'].forEach((imgTag) => {
+        imgTag.src = ''
+        console.log(imgTag)
+      })
+
       this.loadPictures(id)
       this.$refs['pictureContainer'].scrollTop = 0
       this.selectSection = false
@@ -259,10 +268,6 @@ export default {
 
         img {
           width: 100%;
-          &[lazy=loading] {
-            width: 20%;
-            margin: 20px 0;
-          }
         }
 
       }
