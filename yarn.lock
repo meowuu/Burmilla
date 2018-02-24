@@ -6531,10 +6531,6 @@ vue-infinite-loading@^2.2.3:
   version "2.2.3"
   resolved "http://registry.npm.taobao.org/vue-infinite-loading/download/vue-infinite-loading-2.2.3.tgz#6912fcbe3fd44b97a555ab0b5a78b6100bd056c5"
 
-vue-lazyload@^1.1.4:
-  version "1.1.4"
-  resolved "http://registry.npm.taobao.org/vue-lazyload/download/vue-lazyload-1.1.4.tgz#94dbb3fcb047f147f37900c0e22ad4fd478e31c4"
-
 vue-loader@^13.3.0:
   version "13.7.1"
   resolved "http://registry.npm.taobao.org/vue-loader/download/vue-loader-13.7.1.tgz#d9009d0abd392b4efe8b8fb1f542f6723b02dd3a"
