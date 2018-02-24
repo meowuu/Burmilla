@@ -170,7 +170,6 @@ export default {
 
       this.$refs['images'].forEach((imgTag) => {
         imgTag.src = ''
-        console.log(imgTag)
       })
 
       this.loadPictures(id)
@@ -181,7 +180,11 @@ export default {
       let flag = true
       while (flag) {
         flag = !this.scrollSection()
-        await this.fetchSection()
+        await this.fetchSection().then((data) => {
+          if (data.results.length === 0) {
+            flag = false
+          }
+        })
       }
     },
     scrollSection () {
