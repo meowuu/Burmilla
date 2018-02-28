@@ -168,7 +168,7 @@ export default {
     toReadSection (id) {
       pool.abortAll()
 
-      this.$refs['images'].forEach((imgTag) => {
+      this.$refs['images'] && this.$refs['images'].forEach((imgTag) => {
         imgTag.src = ''
       })
 
