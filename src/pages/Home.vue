@@ -1,12 +1,5 @@
 <template>
   <div class="home">
-
-    <transition name="fade">
-      <div class="cover-bg" v-if="background.visible">
-        <img :src="background.cover" alt="">
-      </div>
-    </transition>
-
     <div class="container">
       <div class="title">
         <span>
@@ -19,8 +12,6 @@
           class="item"
           v-for="(book, index) in list"
           :key="index"
-          @mouseenter="mEnter(book)"
-          @mouseleave="mOut(book)"
           @click="$router.push({
             name: 'Read',
             params: {
@@ -28,14 +19,23 @@
             }
           })"
         >
-          <div class="cover">
-            <img :src="book.cover" alt="">
+          <div class="background">
+            <img :src="book.cover"  alt="cover back">
           </div>
-          <div class="name">
-            {{ book.name }}
+          <div class="content">
+            <div class="cover">
+              <img :src="book.cover" alt="">
+            </div>
+            <div class="name">
+              {{ book.name }}
+            </div>
           </div>
         </div>
       </div>
+    </div>
+
+    <div class="author">
+      Made With ❤️ By <a href="https://github.com/moonou">moonou</a>
     </div>
   </div>
 </template>
@@ -63,15 +63,6 @@ export default {
         }
       })
     })
-  },
-  methods: {
-    mEnter (book) {
-      this.background.visible = true
-      this.background.cover = book.cover
-    },
-    mOut () {
-      this.background.visible = false
-    }
   }
 }
 </script>
@@ -83,26 +74,16 @@ export default {
   overflow: hidden;
   background: #444;
   display: flex;
-  justify-content: center;
-
-  .cover-bg {
-    position: absolute;
-    width: 100%;
-    height: 100%;
-    z-index: 1;
-    img {
-      width: 100%;
-      height: 100%;
-      object-fit: cover;
-      filter: blur(40px);
-    }
-  }
+  flex-direction: column;
+  align-items: center;
 
   .container {
     width: 70%;
     position: relative;
     z-index: 2;
     margin-top: 50px;
+    flex: 1 1 auto;
+    overflow: auto;
 
     .title {
       font-size: 40px;
@@ -127,8 +108,6 @@ export default {
         margin: 0 20px;
         background: #fff;
         margin: auto;
-        display: flex;
-        align-items: center;
         cursor: pointer;
         transition: all .3s ease;
         border-radius: 4px;
@@ -136,12 +115,34 @@ export default {
         padding: 10px;
         box-sizing: border-box;
         box-shadow: 0 2px 10px 0 #292929;
+        position: relative;
 
         &:hover {
           transform: translateY(-10px);
           // box-shadow: 0 12px 15px 0 #919191;
         }
 
+        .background {
+          position: absolute;
+          z-index: 1;
+          top: 0;
+          left: 0;
+          width: 100%;
+          height: 100%;
+          img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            filter: blur(10px);
+            opacity: 0.2;
+          }
+        }
+        .content {
+          position: relative;
+          z-index: 2;
+          display: flex;
+          align-items: center;
+        }
         .cover {
           width: 120px;
           height: 120px;
@@ -163,6 +164,15 @@ export default {
           font-size: 14px;
         }
       }
+    }
+  }
+
+  .author {
+    height: 30px;
+    font-size: 14px;
+    color: #999999;
+    a {
+      color: #05ac74;
     }
   }
 }
